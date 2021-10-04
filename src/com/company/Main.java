@@ -128,6 +128,45 @@ public class Main extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JButton button = (JButton) e.getSource();
             button.setVisible(false);
+            String name = button.getText();
+            change(Integer.parseInt(name));
         }
+    }
+
+    public void change(int num) {
+        int i = 0, j = 0;
+        for (int k = 0; k < 4; k++) {
+            for (int l = 0; l < 4; l++) {
+                if (field[k][l] == num) {
+                    i = k;
+                    j = l;
+                }
+            }
+        }
+        if (i > 0) {
+            if (field[i - 1][j] == 0) {
+                field[i - 1][j] = num;
+                field[i][j] = 0;
+            }
+        }
+        if (i < 3) {
+            if (field[i + 1][j] == 0) {
+                field[i + 1][j] = num;
+                field[i][j] = 0;
+            }
+        }
+        if (j > 0) {
+            if (field[i][j - 1] == 0) {
+                field[i][j - 1] = num;
+                field[i][j] = 0;
+            }
+        }
+        if (j < 3) {
+            if (field[i][j + 1] == 0) {
+                field[i][j + 1] = num;
+                field[i][j] = 0;
+            }
+        }
+        rebuild();
     }
 }
