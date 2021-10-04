@@ -100,7 +100,7 @@ public class Main extends JFrame {
 
     private void createMenu() {
         menu = new JMenuBar();
-        JMenu fileMenu = new JMenu("Файл");
+        JMenu fileMenu = new JMenu("Menu");
         for (int i = 0; i < fileItems.length; i++) {
             JMenuItem item = new JMenuItem(fileItems[i]);
             item.setActionCommand(fileItems[i].toLowerCase());
