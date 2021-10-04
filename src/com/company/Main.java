@@ -25,8 +25,77 @@ public class Main extends JFrame {
         setJMenuBar(menu);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container container = getContentPane();
+        base_generation();
         playGround.setDoubleBuffered(true);
         container.add(playGround);
+        rebuild();
+    }
+
+    public void base_generation() {
+        int[] invariants = new int[16];
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                field[i][j] = 0;
+                invariants[i*4 + j] = 0;
+            }
+        }
+
+        for (int i = 1; i < 16; i++) {
+            int k;
+            int l;
+            do {
+                k = generator.nextInt(100) % 4;
+                l = generator.nextInt(100) % 4;
+            }
+            while (field[k][l] != 0);
+            field[k][l] = i;
+            invariants[k*4+l] = i;
+        }
+
+        boolean change = true;
+        int counter = 1;
+        while (change) {
+            change = false;
+            for (int i = 0; i < 16; i++) {
+                if (invariants[i] != i) {
+                    for (int j = 0; j < 16; j++) {
+                        if (invariants[j] == i) {
+                            int temp = invariants[i];
+                            invariants[i] = invariants[j];
+                            invariants[j] = temp;
+                            change = true;
+                            counter++;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (counter % 2 != 0) {
+            int temp = field[0][0];
+            field[0][0] = field[3][3];
+            field[3][3] = temp;
+        }
+    }
+
+    public void rebuild() {
+        playGround.removeAll();
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                JButton button = new JButton(Integer.toString(field[i][j]));
+                button.setFocusable(false);
+                playGround.add(button);
+                if (field[i][j] == 0)
+                    button.setVisible(false);
+                else
+                    button.addActionListener(new ClickListener());
+            }
+        }
+        playGround.validate();
     }
 
     private void createMenu() {
@@ -49,7 +118,16 @@ public class Main extends JFrame {
                 System.exit(0);
             }
             if ("new".equals(command)) {
+                base_generation();
+                rebuild();
             }
+        }
+    }
+
+    private class ClickListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            JButton button = (JButton) e.getSource();
+            button.setVisible(false);
         }
     }
 }
