@@ -133,6 +133,19 @@ public class Main extends JFrame {
         }
     }
 
+    public boolean checkVictory() {
+        boolean status = true;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (i == 3 && j > 2)
+                    break;
+                if (field[i][j] != i * 4 + j + 1)
+                    status = false;
+            }
+        }
+        return status;
+    }
+
     public void change(int num) {
         int i = 0, j = 0;
         for (int k = 0; k < 4; k++) {
@@ -168,5 +181,12 @@ public class Main extends JFrame {
             }
         }
         rebuild();
+        if (checkVictory()) {
+            JOptionPane.showMessageDialog(null, "You win!", "Congratulations!", 1);
+            base_generation();
+            rebuild();
+            setVisible(false);
+            setVisible(true);
+        }
     }
 }
